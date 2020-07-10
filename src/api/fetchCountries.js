@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const URL = 'https://covid19.mathdro.id/api/countries';
 
+
+/*
 export const fetchCountryData = (country) => {
   const countryUrl = `${URL}/${country}`;
 
@@ -16,6 +18,6 @@ export const fetchCountryData = (country) => {
     .catch(() => {
 
     });
-}
+}*/
 
 export const countries = axios.get(URL).then(({ data }) => data.countries); 
