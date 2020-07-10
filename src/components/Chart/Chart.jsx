@@ -1,72 +1,72 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
 
-import fetchDaily from '../../api/fetchDaily';
+import { fetchDailyData } from '../../api';
 
-const Chart = ({ data }) => {
-    const [dailyData, setDailyData] = useState({});
-  
+import styles from './Chart.module.css';
+
+const Chart = ({ data: { confirmed, recovered, deaths }, country }) => {
+  const [dailyData, setDailyData] = useState({});
+
   useEffect(() => {
-    async function fetchMyAPI() {
-        const dailyData = await fetchDaily();
+    const fetchMyAPI = async () => {
+      const initialDailyData = await fetchDailyData();
 
-        setDailyData(dailyData)
-      }
-  
+      setDailyData(initialDailyData);
+    };
+
     fetchMyAPI();
   }, []);
 
   const barChart = (
-    data.confirmed ? <Bar
-     data={{
-       labels: ["Infected", "Recovered", "Deaths"],
-       datasets: [
-         {
-           label: "People",
-           backgroundColor: ["blue", "green", "red"],
-           data: [657, 45, 5]
-         }
-       ]
-     }}
-     options={{
-       legend: { display: false },
-       title: {
-         display: true,
-         text: 'Current state in Croatia'
-       }
-     }}
-   /> : null
- )
+    confirmed ? (
+      <Bar
+        data={{
+          labels: ['Infected', 'Recovered', 'Deaths'],
+          datasets: [
+            {
+              label: 'People',
+              backgroundColor: ['rgba(0, 0, 255, 0.5)', 'rgba(0, 255, 0, 0.5)', 'rgba(255, 0, 0, 0.5)'],
+              data: [confirmed.value, recovered.value, deaths.value],
+            },
+          ],
+        }}
+        options={{
+          legend: { display: false },
+          title: { display: true, text: `Current state in ${country}` },
+        }}
+      />
+    ) : null
+  );
 
- const lineChart = (
-   dailyData[0] && !data.confirmed ? <Line data={{
-     labels: dailyData.map(({ date }) => date),
-     datasets: [{
-       data: dailyData.map(({ confirmed }) => confirmed),
-       label: "Infected",
-       borderColor: "#3333ff",
-       fill: true
-     }, {
-       data: dailyData.map(({ deaths }) => deaths),
-       label: "Deaths",
-       borderColor: "red",
-       backgroundColor: "#ff9999",
-       fill: true
-     }
-     ]
-   }}
-   />: null
- )
-
-
+  const lineChart = (
+    dailyData[0] ? (
+      <Line
+        data={{
+          labels: dailyData.map(({ date }) => date),
+          datasets: [{
+            data: dailyData.map((data) => data.confirmed),
+            label: 'Infected',
+            borderColor: '#3333ff',
+            fill: true,
+          }, {
+            data: dailyData.map((data) => data.deaths),
+            label: 'Deaths',
+            borderColor: 'red',
+            backgroundColor: 'rgba(255, 0, 0, 0.5)',
+            fill: true,
+          },
+          ],
+        }}
+      />
+    ) : null
+  );
 
   return (
-    <div>
-      {lineChart}
-      {barChart}
-
+    <div className={styles.container}>
+      {country ? barChart : lineChart}
     </div>
-  )
-}
+  );
+};
 
 export default Chart;

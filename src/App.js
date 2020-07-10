@@ -1,47 +1,39 @@
 import React from 'react';
 
-import './App.css';
+import { Cards, CountryPicker, Chart, Navbar } from './components/index';
+import { fetchData } from './api/';
+import styles from './App.css';
 
-/*
-import Info from './components/Info/Info';
-import Chart from './components/Chart/Chart';
-import Countries from './components/Countries/Countries';*/
-
-import Chart from './components/Chart/Chart';
-import fetchData from './api/fetchData';
-
-import './App.css';
-import { Container, Typography } from '@material-ui/core';
+import image from './components/images/image.png';
 
 class App extends React.Component {
   state = {
     data: {},
+    country: '',
   }
 
   async componentDidMount() {
-    const fetchedData = await fetchData();
+    const data = await fetchData();
 
-    this.setState({ data: fetchedData });
+    this.setState({ data });
   }
 
   handleCountryChange = async (country) => {
-    const fetchedData = await fetchData(country);
+    const data = await fetchData(country);
 
-    this.setState({ data: fetchedData });
+    this.setState({ data, country: country });
   }
 
-
-
   render() {
-    const { data} = this.state;
+    const { data, country } = this.state;
 
     return (
-      <Container>
-        <Typography variant="h1" className="heading">Corona Statistics</Typography>
-        <Countries handleCountryChange={this.handleCountryChange} f/>
-        <Info data={data} />
-        <Chart data={data} />
-      </Container>
+      <div className={styles.container}>
+        <img className={styles.image} src={image} alt="COVID-19" />
+        <Cards data={data} />
+        <CountryPicker handleCountryChange={this.handleCountryChange} />
+        <Chart data={data} country={country} /> 
+      </div>
     );
   }
 }
