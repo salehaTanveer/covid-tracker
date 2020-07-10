@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
+
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+
+
 import { countries, fetchCountry } from '../../api/fetchCountries';
 
 const Countries = () => {
@@ -16,11 +21,11 @@ const Countries = () => {
 
   return (
     <div>
-      <select onChange={(e) => setCountry(e.target.value)}>
+      <Select onChange={(e) => setCountry(e.target.value)}>
         {fetchedCountries.map(({name}) => {
           return <option value={name}>{name}</option>
         })}
-      </select>
+        </Select>
       <h1>{country}</h1>
     </div>
   )

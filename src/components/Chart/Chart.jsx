@@ -29,7 +29,7 @@ const Chart = () => {
               fill: true
             }, { 
               data: data.map(({deaths}) => deaths),
-              label: "Recovered",
+              label: "Deaths",
               borderColor: "red",
               backgroundColor: "#ff9999",
               fill: true

@@ -8,6 +8,9 @@ import Countries from './components/Countries/Countries';
 
 import fetchData from './api/fetchData';
 
+import './App.css';
+import { Container, Typography } from '@material-ui/core';
+
 class App extends React.Component {
   state = {
     data: {},
@@ -23,11 +26,12 @@ class App extends React.Component {
     const { data} = this.state;
 
     return (
-      <>
-        {data.confirmed ? <Info data={data} /> : 'loading'}
-        <div style={{ width: '50%'}}><Chart /></div>
-        <Countries />
-      </>
+      <Container>
+        <Typography variant="h1" className="heading">Corona Statistics</Typography>
+        <Info data={data} />
+        <Chart />
+        {/* <Countries /> */}
+      </Container>
     );
   }
 }
